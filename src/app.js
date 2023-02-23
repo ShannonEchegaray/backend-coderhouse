@@ -1,10 +1,12 @@
+// Imports
 import express from "express";
+
+// Routes
+import router from "./routes/index.js";
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("Hola mundo");
-});
+app.use("/", router);
 
 app.listen(8080, () => {
   console.log("Servidor corriendo en: http://localhost:8080");
