@@ -8,6 +8,10 @@ const app = express();
 
 app.use("/", router);
 
+app.use((error, req, res, next) => {
+  res.send(error.message);
+});
+
 app.listen(8080, () => {
   console.log("Servidor corriendo en: http://localhost:8080");
 });
