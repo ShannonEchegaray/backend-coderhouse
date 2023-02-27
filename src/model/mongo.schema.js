@@ -20,7 +20,7 @@ export const productSchema = mongoose.model(
   "Products",
   new Schema(
     {
-      name: { type: String, required: true },
+      name: { type: String, required: true, unique: true },
       description: { type: String, required: true },
       category: { type: mongoose.Types.ObjectId, ref: "Category" },
       thumbnail: { type: [String] },
@@ -38,26 +38,23 @@ export const categorySchema = mongoose.model(
   })
 );
 
+const productPurchased = new Schema({
+  name: { type: String, required: true },
+  description: { type: String, required: true },
+  quantity: { type: Number },
+  price: { type: Number, default: 0 },
+});
+
 export const cartSchema = mongoose.model(
   "Cart",
   new Schema(
     {
       user: { type: mongoose.Types.ObjectId, ref: "User" },
-      items: { type: [productSchema] },
+      items: { type: [{ type: Schema.Types.ObjectId, ref: "Products" }] },
     },
     { timestamps: true }
   )
 );
-
-const productPurchased = new Schema({
-  name: { type: String, required: true },
-  description: { type: String, required: true },
-  category: { type: mongoose.Types.ObjectId, ref: "Category" },
-  thumbnail: { type: [String] },
-  stock: { type: Number, default: 0 },
-  quantity: { type: Number },
-  price: { type: Number, default: 0 },
-});
 
 export const orderSchema = mongoose.model(
   "Order",

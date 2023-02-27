@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Client from "./client";
-import { mongoConfig } from "./config";
+import Client from "./client.js";
+import { mongoConfig } from "./config.js";
 
 class MongoClient extends Client {
   static connect() {
