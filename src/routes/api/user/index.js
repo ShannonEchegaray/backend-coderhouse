@@ -1,5 +1,6 @@
 import { Router } from "express";
 import controller from "../../../controller/user.controller.js";
+import { validateUserProperties } from "../../../middlewares/validate.js";
 
 const router = Router();
 
@@ -9,7 +10,7 @@ router.get("/test", (req, res) => {
 
 router.get("/profile", controller.getProfileByUser);
 router.get("/:id/profile", controller.getProfileById);
-router.post("/", controller.createUser);
+router.post("/", validateUserProperties(), controller.createUser);
 router.put("/", controller.updateByUser);
 router.put("/:id", controller.updateById);
 router.delete("/:id", controller.deleteById);
