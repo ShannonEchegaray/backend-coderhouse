@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/", router);
 
 app.use((error, req, res, next) => {
+  console.log(error);
   res.send(error.message);
 });
 
