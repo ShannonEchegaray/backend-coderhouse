@@ -1,22 +1,26 @@
+import ProductsDao from "../model/DAO/products.mongo.js";
+
+const productsDAO = ProductsDao.getInstance();
+
 class ProductsService {
   async getProducts() {
-    throw new Error("Not implemented yet.");
+    return productsDAO.getAll();
   }
 
-  async getProductById() {
-    throw new Error("Not implemented yet.");
+  async getProductById(id) {
+    return productsDAO.getById(id);
   }
 
-  async createProduct() {
-    throw new Error("Not implemented yet.");
+  async createProduct(properties) {
+    return productsDAO.create(properties);
   }
 
-  async updateProductById() {
-    throw new Error("Not implemented yet.");
+  async updateProductById(id, properties) {
+    return productsDAO.updateById(id, properties);
   }
 
-  async deleteProductById() {
-    throw new Error("Not implemented yet.");
+  async deleteProductById(id) {
+    return productsDAO.deleteById(id);
   }
 }
 

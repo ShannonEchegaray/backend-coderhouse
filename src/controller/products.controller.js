@@ -3,9 +3,9 @@ import service from "../service/products.service.js";
 class ProductsController {
   async getProducts(req, res, next) {
     try {
-      await service.getProducts();
+      const products = await service.getProducts();
 
-      res.send("getProducts");
+      res.json(products);
     } catch (error) {
       next(error);
     }
@@ -13,9 +13,9 @@ class ProductsController {
 
   async getProductById(req, res, next) {
     try {
-      await service.getProductById(req.params.id);
+      const product = await service.getProductById(req.params.id);
 
-      res.send("getProductById");
+      res.json(product);
     } catch (error) {
       next(error);
     }
@@ -23,9 +23,9 @@ class ProductsController {
 
   async createProduct(req, res, next) {
     try {
-      await service.createProduct(req.body);
+      const created = await service.createProduct(req.body);
 
-      res.send("createProduct");
+      res.status(201).json(created);
     } catch (error) {
       next(error);
     }
@@ -33,9 +33,9 @@ class ProductsController {
 
   async updateProductById(req, res, next) {
     try {
-      await service.updateProductById(req.params.id);
+      const updated = await service.updateProductById(req.params.id, req.body);
 
-      res.send("updateProductById");
+      res.json(updated);
     } catch (error) {
       next(error);
     }
@@ -45,7 +45,7 @@ class ProductsController {
     try {
       await service.deleteProductById(req.params.id);
 
-      res.send("deleteProductById");
+      res.status(204).end();
     } catch (error) {
       next(error);
     }

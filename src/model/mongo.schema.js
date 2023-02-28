@@ -6,11 +6,12 @@ export const userSchema = mongoose.model(
     {
       name: { type: String, required: true },
       lastname: { type: String, required: true },
-      email: { type: String, required: true },
-      nickname: { type: String, required: true },
-      phone_number: { type: String },
+      email: { type: String, required: true, unique: true },
+      nickname: { type: String, required: true, unique: true },
+      phone_number: { type: String, unique: true },
       profile_image: { type: String, default: "placeholder.jpg" },
       address: { type: String },
+      cart: { type: mongoose.Types.ObjectId, ref: "Cart" },
     },
     { timestamps: true }
   )

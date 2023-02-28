@@ -25,8 +25,12 @@ class CartController {
       next(error);
     }
   }
+
   async createCart(req, res, next) {
     try {
+      const newCart = await service.createCart(req.body);
+
+      res.status(201).json(newCart);
     } catch (error) {
       next(error);
     }
@@ -41,6 +45,9 @@ class CartController {
 
   async modifyCartById(req, res, next) {
     try {
+      const update = await service.modifyCartById(req.id, req.body);
+
+      res.status(200).json(update);
     } catch (error) {
       next(error);
     }
@@ -52,8 +59,11 @@ class CartController {
     }
   }
 
-  async deleteCartById(req, res, next) {
+  async deleteCartProductsById(req, res, next) {
     try {
+      await service.deleteCartProductsById();
+
+      res.status(204).end();
     } catch (error) {
       next(error);
     }

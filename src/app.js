@@ -6,6 +6,10 @@ import router from "./routes/index.js";
 
 const app = express();
 
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/", router);
 
 app.use((error, req, res, next) => {

@@ -13,11 +13,22 @@ class CartService {
     return cartDAO.getById(id);
   }
 
-  async createCart() {}
+  async createCart(properties) {
+    return cartDAO.create(properties);
+  }
+
   async addProductByUser() {}
-  async modifyCartById(id) {}
+
+  async modifyCartById(id, properties) {
+    return cartDAO.updateById(id, properties);
+  }
+
   async deleteProductByUser() {}
-  async deleteCartById(id) {}
+
+  async deleteCartProductsById(id) {
+    const cart = await cartDAO.getById(id);
+    console.log(cart);
+  }
 }
 
 export default new CartService();
