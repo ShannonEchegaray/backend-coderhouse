@@ -6,6 +6,8 @@ class UserController {
     try {
       const profile = await UserService.getProfileByUser();
 
+      console.log(req.user);
+
       res.json(profile);
     } catch (error) {
       next(error);

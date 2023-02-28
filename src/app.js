@@ -1,6 +1,8 @@
 // Imports
 import express from "express";
 
+import "./middlewares/passport.js";
+
 // Routes
 import router from "./routes/index.js";
 
