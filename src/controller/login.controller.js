@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import passport from "passport";
+import loginService from "../service/login.service.js";
 
 class LoginController {
   async login(req, res, next) {
@@ -31,6 +32,16 @@ class LoginController {
         }
       }
     )(req, res, next);
+  }
+
+  async isAdmin(req, res, next) {
+    try {
+      const admin = await loginService.isAdmin(req.user);
+      if (!admin) throw new Error("El usuario no es administrador");
+      next();
+    } catch (error) {
+      next(error);
+    }
   }
 }
 

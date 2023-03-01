@@ -20,11 +20,40 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   userController.getProfileByUser
 );
-router.get("/:id/profile", userController.getProfileById);
-router.post("/", validateUserProperties(), userController.createUser);
-router.put("/", userController.updateByUser);
-router.put("/:id", userController.updateById);
-router.delete("/:id", userController.deleteById);
-router.delete("/:id", userController.deleteByUser);
+router.get(
+  "/:id/profile",
+  passport.authenticate("jwt", { session: false }),
+  loginController.isAdmin,
+  userController.getProfileById
+);
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  validateUserProperties(),
+  loginController.isAdmin,
+  userController.createUser
+);
+router.put(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  userController.updateByUser
+);
+router.put(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  loginController.isAdmin,
+  userController.updateById
+);
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  loginController.isAdmin,
+  userController.deleteById
+);
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  userController.deleteByUser
+);
 
 export default router;

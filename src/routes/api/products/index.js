@@ -1,5 +1,7 @@
 import { Router } from "express";
-import controller from "../../../controller/products.controller.js";
+import productController from "../../../controller/products.controller.js";
+import loginController from "../../../controller/login.controller.js";
+import passport from "passport";
 
 const router = Router();
 
@@ -7,10 +9,35 @@ router.get("/test", (req, res) => {
   res.send("Product");
 });
 
-router.get("/", controller.getProducts);
-router.get("/:id", controller.getProductById);
-router.post("/", controller.createProduct);
-router.put("/:id", controller.updateProductById);
-router.delete("/:id", controller.deleteProductById);
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  loginController.isAdmin,
+  productController.getProducts
+);
+router.get(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  loginController.isAdmin,
+  productController.getProductById
+);
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  loginController.isAdmin,
+  productController.createProduct
+);
+router.put(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  loginController.isAdmin,
+  productController.updateProductById
+);
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  loginController.isAdmin,
+  productController.deleteProductById
+);
 
 export default router;

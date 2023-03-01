@@ -7,12 +7,14 @@ export const userSchema = mongoose.model(
       name: { type: String, required: true },
       lastname: { type: String, required: true },
       password: { type: String, required: true },
+      role: { type: String },
       email: { type: String, required: true, unique: true },
       nickname: { type: String, required: true, unique: true },
       phone_number: { type: String, required: false, unique: true },
       profile_image: { type: String, default: "placeholder.jpg" },
       address: { type: String, required: true },
       cart: { type: mongoose.Types.ObjectId, ref: "Cart" },
+      order: { type: mongoose.Types.ObjectId, ref: "Order" },
     },
     { timestamps: true }
   )
@@ -45,6 +47,7 @@ const productPurchased = new Schema({
   description: { type: String, required: true },
   quantity: { type: Number },
   price: { type: Number, default: 0 },
+  finalPrice: { type: Number },
 });
 
 export const cartSchema = mongoose.model(
@@ -52,7 +55,10 @@ export const cartSchema = mongoose.model(
   new Schema(
     {
       user: { type: mongoose.Types.ObjectId, ref: "User" },
-      items: { type: [{ type: Schema.Types.ObjectId, ref: "Products" }] },
+      items: {
+        type: [{ type: Schema.Types.ObjectId, ref: "Products" }],
+        default: [],
+      },
     },
     { timestamps: true }
   )
@@ -65,6 +71,7 @@ export const orderSchema = mongoose.model(
       items: { type: [productPurchased] },
       state: { type: String, default: "generated" },
       email: { type: String },
+      user: { type: mongoose.Types.ObjectId, ref: "User" },
     },
     { timestamps: true }
   )
