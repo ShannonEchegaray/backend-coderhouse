@@ -14,7 +14,7 @@ export const userSchema = mongoose.model(
       profile_image: { type: String, default: "placeholder.jpg" },
       address: { type: String, required: true },
       cart: { type: mongoose.Types.ObjectId, ref: "Cart" },
-      order: { type: mongoose.Types.ObjectId, ref: "Order" },
+      order: [{ type: mongoose.Types.ObjectId, ref: "Order" }],
     },
     { timestamps: true }
   )

@@ -12,6 +12,8 @@ class CartController {
 
   async getCartByUser(req, res, next) {
     try {
+      const data = await service.getCartByUser(req.user._id);
+      res.json(data);
     } catch (error) {
       next(error);
     }

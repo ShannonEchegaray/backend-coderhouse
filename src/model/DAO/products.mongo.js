@@ -17,11 +17,11 @@ class ProductsDao extends Base {
   }
 
   async getAll(query = {}) {
-    return this.schema.find(query, { __v: false }).populate();
+    return this.schema.find(query, { __v: false });
   }
 
   async getById(id) {
-    return this.schema.findOne({ _id: id }).populate();
+    return this.schema.findOne({ _id: id }, { __v: false });
   }
 
   async updateById(id, properties = {}) {

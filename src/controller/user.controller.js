@@ -4,7 +4,7 @@ import CartService from "../service/cart.service.js";
 class UserController {
   async getProfileByUser(req, res, next) {
     try {
-      const profile = await UserService.getProfileByUser();
+      const profile = await UserService.getProfileByUser(req.user);
 
       console.log(req.user);
 
@@ -38,7 +38,7 @@ class UserController {
 
   async updateByUser(req, res, next) {
     try {
-      const updated = await UserService.updateByUser();
+      const updated = await UserService.updateByUser(req.user._id, req.body);
 
       res.json(updated);
     } catch (error) {
@@ -48,7 +48,7 @@ class UserController {
 
   async updateById(req, res, next) {
     try {
-      const updated = await UserService.updateById();
+      const updated = await UserService.updateById(req.params.id, req.body);
 
       res.json(updated);
     } catch (error) {
@@ -58,7 +58,7 @@ class UserController {
 
   async deleteById(req, res, next) {
     try {
-      await UserService.deleteById();
+      await UserService.deleteById(req.params.id);
 
       res.status(204).end();
     } catch (error) {
@@ -68,7 +68,7 @@ class UserController {
 
   async deleteByUser(req, res, next) {
     try {
-      await UserService.deleteByUser();
+      await UserService.deleteByUser(req.user._id);
 
       res.status(204).end();
     } catch (error) {

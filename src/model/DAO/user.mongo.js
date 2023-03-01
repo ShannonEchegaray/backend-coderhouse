@@ -17,11 +17,11 @@ class UserDao extends Base {
   }
 
   async getAll(query = {}) {
-    return this.schema.find(query, { __v: false }).populate("cart");
+    return this.schema.find(query, { __v: false });
   }
 
   async getById(id) {
-    return this.schema.findOne({ _id: id }).populate("cart");
+    return this.schema.findOne({ _id: id }).populate("cart").populate("order");
   }
 
   async updateById(id, properties = {}) {
