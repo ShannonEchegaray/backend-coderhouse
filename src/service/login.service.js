@@ -4,7 +4,7 @@ const userDAO = UserDao.getInstance();
 
 class LoginService {
   async isAdmin(user) {
-    const backendUser = await userDAO.getById(user._id);
+    const backendUser = await userDAO.getById(user.id);
     console.log(backendUser);
     return backendUser.role === "admin";
   }

@@ -28,7 +28,7 @@ class UserController {
     try {
       const user = await UserService.createUser(req.body);
       const cart = await CartService.createCart({ user: user.id });
-      await UserService.updateById(user._id, { ...user._doc, cart: cart.id });
+      await UserService.updateById(user.id, { ...user, cart: cart.id });
 
       res.status(201).json(user);
     } catch (error) {
@@ -38,7 +38,7 @@ class UserController {
 
   async updateByUser(req, res, next) {
     try {
-      const updated = await UserService.updateByUser(req.user._id, req.body);
+      const updated = await UserService.updateByUser(req.user.id, req.body);
 
       res.json(updated);
     } catch (error) {
@@ -68,7 +68,7 @@ class UserController {
 
   async deleteByUser(req, res, next) {
     try {
-      await UserService.deleteByUser(req.user._id);
+      await UserService.deleteByUser(req.user.id);
 
       res.status(204).end();
     } catch (error) {

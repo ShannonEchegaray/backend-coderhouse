@@ -12,7 +12,7 @@ class CartController {
 
   async getCartByUser(req, res, next) {
     try {
-      const data = await service.getCartByUser(req.user._id);
+      const data = await service.getCartByUser(req.user.id);
       res.json(data);
     } catch (error) {
       next(error);
@@ -47,7 +47,7 @@ class CartController {
 
   async modifyCartById(req, res, next) {
     try {
-      const update = await service.modifyCartById(req.id, req.body);
+      const update = await service.modifyCartById(req.params.id, req.body);
 
       res.status(200).json(update);
     } catch (error) {

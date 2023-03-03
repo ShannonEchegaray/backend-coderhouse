@@ -1,5 +1,6 @@
 import MongoClient from "../../config/mongo.client.js";
 import { userSchema } from "../mongo.schema.js";
+import UserDTO from "../DTO/userDTO.js";
 import Base from "./base.js";
 
 let instance = null;
@@ -17,22 +18,40 @@ class UserDao extends Base {
   }
 
   async getAll(query = {}) {
-    return this.schema.find(query, { __v: false });
+    const users = await this.schema.find(query, { __v: false });
+
+    return users.map((user) => new UserDTO(user));
   }
 
   async getById(id) {
-    return this.schema.findOne({ _id: id }).populate("cart").populate("order");
+    const user = await this.schema
+      .findOne({ _id: id })
+      .populate("cart")
+      .populate("order");
+
+    if (!user) throw new Error("No results.");
+
+    return new UserDTO(user);
   }
 
   async updateById(id, properties = {}) {
-    const data = this.getById(id);
-    console.log(properties);
-    return this.schema.updateOne({ _id: id }, { ...data, ...properties });
+    try {
+      const data = await this.getById(id);
+      const updated = await this.schema.updateOne(
+        { _id: id },
+        { ...data, ...properties }
+      );
+
+      if (updated.matchedCount === 0)
+        throw new Error("No se encontro documento a modificar");
+    } catch (error) {
+      throw error;
+    }
   }
 
   async create(properties) {
     const data = this.schema(properties);
-    return data.save();
+    return new UserDTO(await data.save());
   }
 
   async deleteById(id) {

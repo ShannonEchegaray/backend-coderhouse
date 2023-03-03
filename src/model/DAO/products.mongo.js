@@ -1,5 +1,6 @@
 import MongoClient from "../../config/mongo.client.js";
 import { productSchema } from "../mongo.schema.js";
+import ProductDTO from "../DTO/productsDTO.js";
 import Base from "./base.js";
 
 let instance = null;
@@ -17,21 +18,39 @@ class ProductsDao extends Base {
   }
 
   async getAll(query = {}) {
-    return this.schema.find(query, { __v: false });
+    const products = await this.schema.find(query, { __v: false });
+
+    return products.map((product) => new ProductDTO(product));
   }
 
   async getById(id) {
-    return this.schema.findOne({ _id: id }, { __v: false });
+    const product = await this.schema.findOne({ _id: id }, { __v: false });
+
+    if (!product) throw new Error("No results.");
+
+    return ProductDTO(product);
   }
 
   async updateById(id, properties = {}) {
-    const data = this.getById(id);
-    return this.schema.updateOne({ _id: id }, { ...data, ...properties });
+    try {
+      const data = await this.getById(id);
+      const updated = await this.schema.updateOne(
+        { _id: id },
+        { ...data, ...properties }
+      );
+
+      if (updated.matchedCount === 0)
+        throw new Error("No se han encontrado documentos a modificar");
+
+      return;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async create(properties) {
     const data = this.schema(properties);
-    return data.save();
+    return new ProductDTO(await data.save());
   }
 
   async deleteById(id) {
