@@ -17,7 +17,7 @@ passport.use(
     { usernameField: "email", passReqToCallback: true },
     async (req, email, password, done) => {
       try {
-        const user = await UserDAO.getAll({ email: email });
+        const user = await UserDAO.getAll({ email });
         if (user.length === 1) {
           return done(null, false, { message: "El usuario ya existe" });
         }
@@ -42,17 +42,19 @@ passport.use(
     { usernameField: "email" },
     async (email, password, done) => {
       try {
-        const user = await UserDAO.getAll({ email: email });
-        if (user.length === 0)
+        const user = await UserDAO.getAll({ email });
+        if (user.length === 0) {
           return done(null, false, { message: "El usuario no existe" });
+        }
 
         if (
           !user[0].email === email &&
           !(await compare(password, user[0].password))
-        )
+        ) {
           return done(null, false, {
             message: "La contraseña o email no coinciden",
           });
+        }
 
         console.log("El usuario se logueo con exito");
 

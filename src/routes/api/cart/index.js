@@ -34,21 +34,21 @@ router.post(
   cartController.addProductByUser
 );
 router.put(
-  "/adm/:id",
+  "/:id/products",
   passport.authenticate("jwt", { session: false }),
   loginController.isAdmin,
-  cartController.modifyCartById
+  cartController.modifyCartProductsById
 );
 router.delete(
   "/",
   passport.authenticate("jwt", { session: false }),
-  cartController.deleteProductByUser
+  cartController.deleteAllProductByUser
 );
 router.delete(
   "/adm/:id",
   passport.authenticate("jwt", { session: false }),
   loginController.isAdmin,
-  cartController.deleteCartProductsById
+  cartController.deleteAllCartProductsById
 );
 
 export default router;

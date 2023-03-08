@@ -10,11 +10,13 @@ class OrderService {
   async purchaseOrderByUser(user) {
     const cart = await cartDAO.getAll({ user: user.id });
 
-    if (cart.length === 0)
+    if (cart.length === 0) {
       throw new Error("No existe carrito vinculado al usuario");
+    }
 
-    if (cart[0].length === 0)
+    if (cart[0].length === 0) {
       throw new Error("Tu carrito no tiene items para comprar");
+    }
 
     const itemsPurchased = cart[0].items.map((el) => ({
       id: el.id,

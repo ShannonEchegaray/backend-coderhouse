@@ -48,25 +48,32 @@ class CartController {
     }
   }
 
-  async modifyCartById(req, res, next) {
+  async modifyCartProductsById(req, res, next) {
     try {
-      const update = await service.modifyCartById(req.params.id, req.body);
+      const update = await service.modifyCartProductsById(
+        req.params.id,
+        req.body
+      );
 
       res.status(200).json(update);
     } catch (error) {
       next(error);
     }
   }
-  async deleteProductByUser(req, res, next) {
+
+  async deleteAllProductByUser(req, res, next) {
     try {
+      const response = await service.deleteAllProductByUser(req.user);
+
+      res.json(response);
     } catch (error) {
       next(error);
     }
   }
 
-  async deleteCartProductsById(req, res, next) {
+  async deleteAllCartProductsById(req, res, next) {
     try {
-      await service.deleteCartProductsById();
+      await service.deleteAllCartProductsById(req.params.id);
 
       res.status(204).end();
     } catch (error) {

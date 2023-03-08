@@ -14,8 +14,6 @@ class CartService {
   async getCartByUser(id) {
     const user = await userDAO.getById(id);
 
-    console.log(user);
-
     return cartDAO.getById(user.cart.id);
   }
 
@@ -34,7 +32,7 @@ class CartService {
 
     const cart = await this.getCartByUser(user.id);
 
-    const isItem = cart.items.find((cartItem) => cartItem.id === item.id);
+    const isItem = cart.items.find((cartItem) => cartItem.item.id === item.id);
 
     if (isItem) {
       isItem.quantity += item.quantity;
@@ -42,20 +40,55 @@ class CartService {
       cart.items.push({ item: item.id, quantity: item.quantity });
     }
 
+    cart.items = cart.items.map(({ item, quantity }) => ({
+      item: item?.id || item,
+      quantity,
+    }));
+
     return await cartDAO.updateById(cart.id, cart);
   }
 
-  async modifyCartById(id, properties) {
-    return cartDAO.updateById(id, properties);
-  }
-
-  async deleteProductByUser(id) {
-    return cartDAO.deleteById(id);
-  }
-
-  async deleteCartProductsById(id) {
+  async modifyCartProductsById(id, items) {
     const cart = await cartDAO.getById(id);
-    console.log(cart);
+
+    if (!cart) throw new Error("Carrito no encontrado D;");
+
+    const products = await productsDAO.getAll({
+      _id: { $in: items.map(({ id }) => id) },
+    });
+
+    if (items.length !== products.length) {
+      throw new Error("Un producto no fue encontrado.");
+    }
+
+    cart.items = products.map(({ id }) => ({
+      quantity: items.find((item) => item.id === id)?.quantity,
+      item: id,
+    }));
+
+    return await cartDAO.updateById(id, cart);
+  }
+
+  async deleteAllProductByUser(user) {
+    const cart = await this.getCartByUser(user.id);
+
+    cart.items = [];
+
+    return await cartDAO.updateById(cart.id, cart);
+  }
+
+  async deleteAllCartProductsById(id) {
+    const cart = await cartDAO.getById(id);
+
+    if (!cart) {
+      throw new Error(
+        "Capo, el id que me envias difiere de todos los id's que tenemos en la base de datos, que te pasa loco!."
+      );
+    }
+
+    cart.items = [];
+
+    return cartDAO.updateById(id, cart);
   }
 }
 

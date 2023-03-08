@@ -1,6 +1,5 @@
 class ProductsDTO {
   constructor(product) {
-    console.log(product);
     if (!product) return;
     this.id = product.id || product._id;
     this.name = product.name;

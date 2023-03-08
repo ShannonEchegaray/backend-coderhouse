@@ -1,7 +1,8 @@
 export const validateProperties = (object) => {
   for (const property in object) {
-    if (!object?.[property]?.type)
+    if (!object?.[property]?.type) {
       throw new Error("No se especifico el tipo de la propiedad");
+    }
   }
 
   return (req, _, next) => {
@@ -11,10 +12,11 @@ export const validateProperties = (object) => {
           if (!object[property].required) continue;
           throw new Error(`La siguiente propiedad: ${property} no existe.`);
         }
-        if (typeof req.body[property] !== object[property].type)
+        if (typeof req.body[property] !== object[property].type) {
           throw new Error(
             `La siguiente propiedad: ${property} no cumple el tipo especificado: ${object[property].type}`
           );
+        }
       }
       next();
     } catch (error) {

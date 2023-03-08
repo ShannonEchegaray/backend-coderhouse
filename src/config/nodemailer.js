@@ -16,7 +16,7 @@ const promiseSendMail = (subject, message) =>
       {
         from: process.env.EMAIL,
         to: process.env.EMAIL_ADMIN,
-        subject: subject,
+        subject,
         html: message,
       },
       (error, info) => {

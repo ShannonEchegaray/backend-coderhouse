@@ -38,17 +38,14 @@ class CartDao extends Base {
   }
 
   async updateById(id, properties = {}) {
-    try {
-      const data = (await this.getById(id)) || {};
-      const updated = await this.schema.findOneAndUpdate(
-        { _id: id },
-        { ...data, ...properties }
-      );
+    const data = (await this.getById(id)) || {};
+    const updated = await this.schema.findOneAndUpdate(
+      { _id: id },
+      { ...data, ...properties },
+      { new: true }
+    );
 
-      return updated;
-    } catch (error) {
-      throw error;
-    }
+    return new CartDTO(updated);
   }
 
   async create(properties) {
