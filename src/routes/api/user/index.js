@@ -28,9 +28,9 @@ router.get(
 );
 router.post(
   "/",
-  passport.authenticate("jwt", { session: false }),
-  validateUserProperties(),
-  loginController.isAdmin,
+  // passport.authenticate("jwt", { session: false }),
+  // validateUserProperties(),
+  // loginController.isAdmin,
   userController.createUser
 );
 router.put(

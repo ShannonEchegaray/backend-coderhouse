@@ -1,6 +1,10 @@
 import CartDao from "../model/DAO/cart.mongo.js";
+import ProductsDao from "../model/DAO/products.mongo.js";
+import UserDao from "../model/DAO/user.mongo.js";
 
 const cartDAO = CartDao.getInstance();
+const productsDAO = ProductsDao.getInstance();
+const userDAO = UserDao.getInstance();
 
 class CartService {
   async getAllCarts() {
@@ -8,7 +12,8 @@ class CartService {
   }
 
   async getCartByUser(id) {
-    return cartDAO.getById(id);
+    const user = await userDAO.getById(id);
+    return cartDAO.getById(user.cart._id);
   }
 
   async getCartById(id) {
@@ -19,8 +24,24 @@ class CartService {
     return cartDAO.create(properties);
   }
 
-  async addProductByUser(item) {
-    return cartDAO.updateById(item.id, { quantity: item.quantity });
+  async addProductByUser(user, item) {
+    const product = await productsDAO.getById(item.id);
+
+    if (!product) throw new Error("Producto no encontrado.");
+
+    const cart = await this.getCartByUser(user.id);
+
+    const isItem = cart.items.find((cartItem) => cartItem.id === item.id);
+
+    console.log(isItem.id, item.id);
+
+    if (isItem) {
+      isItem.quantity += item.quantity;
+    } else {
+      cart.items.push({ item: item.id, quantity: item.quantity });
+    }
+
+    return await cartDAO.updateById(cart.id, cart);
   }
 
   async modifyCartById(id, properties) {

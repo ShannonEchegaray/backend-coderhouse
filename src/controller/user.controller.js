@@ -4,9 +4,7 @@ import CartService from "../service/cart.service.js";
 class UserController {
   async getProfileByUser(req, res, next) {
     try {
-      const profile = await UserService.getProfileByUser(req.user);
-
-      console.log(req.user);
+      const profile = await UserService.getProfileByUser(req.user.id);
 
       res.json(profile);
     } catch (error) {

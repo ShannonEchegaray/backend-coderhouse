@@ -28,7 +28,7 @@ class ProductsDao extends Base {
 
     if (!product) throw new Error("No results.");
 
-    return ProductDTO(product);
+    return new ProductDTO(product);
   }
 
   async updateById(id, properties = {}) {

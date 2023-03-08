@@ -40,6 +40,9 @@ class CartController {
 
   async addProductByUser(req, res, next) {
     try {
+      const response = await service.addProductByUser(req.user, req.body);
+
+      res.json(response);
     } catch (error) {
       next(error);
     }

@@ -50,15 +50,26 @@ const productPurchased = new Schema({
   finalPrice: { type: Number },
 });
 
+const productCart = new Schema(
+  {
+    item: { type: Schema.Types.ObjectId, ref: "Products" },
+    quantity: { type: Number },
+  },
+  { _id: false, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+);
+
+productCart.virtual("product", {
+  ref: "item",
+  localField: "item",
+  foreignField: "_id",
+});
+
 export const cartSchema = mongoose.model(
   "Cart",
   new Schema(
     {
       user: { type: mongoose.Types.ObjectId, ref: "User" },
-      items: {
-        type: [{ type: Schema.Types.ObjectId, ref: "Products" }],
-        default: [],
-      },
+      items: [{ type: productCart, ref: "Products" }],
     },
     { timestamps: true }
   )

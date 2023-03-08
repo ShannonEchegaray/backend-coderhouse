@@ -17,7 +17,7 @@ class OrderService {
       throw new Error("Tu carrito no tiene items para comprar");
 
     const itemsPurchased = cart[0].items.map((el) => ({
-      _id: el._id,
+      id: el.id,
       name: el.name,
       price: el.price,
       quantity: el.quantity,
@@ -31,9 +31,9 @@ class OrderService {
     });
 
     const userBackend = await userDAO.getById(user.id);
-    userBackend.order.push(orderCreated._id);
+    userBackend.order.push(orderCreated.id);
 
-    await userDAO.updateById(user.id, userBackend._doc);
+    await userDAO.updateById(user.id, userBackend.doc);
 
     return orderCreated;
   }

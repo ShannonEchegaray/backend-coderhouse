@@ -18,13 +18,15 @@ class OrderDao extends Base {
   }
 
   async getAll(query = {}) {
-    const orders = await this.schema.find(query, { __v: false }).populate();
+    const orders = await this.schema
+      .find(query, { __v: false })
+      .populate("user");
 
     return orders.map((order) => new OrderDTO(order));
   }
 
   async getById(id) {
-    const order = this.schema.findOne({ _id: id }).populate();
+    const order = this.schema.findOne({ _id: id }).populate("user");
 
     if (!order) throw new Error("No results");
 
