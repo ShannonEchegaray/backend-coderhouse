@@ -29,21 +29,19 @@ class UserDao extends Base {
       .populate("cart")
       .populate("order");
 
-    if (!user) throw new Error("No results.");
-
     return new UserDTO(user);
   }
 
   async updateById(id, properties = {}) {
     try {
       const data = await this.getById(id);
-      const updated = await this.schema.updateOne(
+      const updated = await this.schema.findOneAndUpdate(
         { _id: id },
-        { ...data, ...properties }
+        { ...data, ...properties },
+        { new: true }
       );
 
-      if (updated.matchedCount === 0)
-        throw new Error("No se encontro documento a modificar");
+      return updated;
     } catch (error) {
       throw error;
     }

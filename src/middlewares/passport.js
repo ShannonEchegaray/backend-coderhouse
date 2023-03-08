@@ -18,16 +18,15 @@ passport.use(
     async (req, email, password, done) => {
       try {
         const user = await UserDAO.getAll({ email: email });
-        if (user.length === 1)
+        if (user.length === 1) {
           return done(null, false, { message: "El usuario ya existe" });
+        }
 
         req.body.password = await encrypt(req.body.password);
 
-        console.log(req.body.password);
-
         const userCreated = await UserDAO.create(req.body);
-        const cartCreated = await CartDAO.create({ user: userCreated._id });
-        await UserDAO.updateById(userCreated._id, { cart: cartCreated._id });
+        const cartCreated = await CartDAO.create({ user: userCreated.id });
+        await UserDAO.updateById(userCreated.id, { cart: cartCreated.id });
 
         return done(null, userCreated);
       } catch (error) {

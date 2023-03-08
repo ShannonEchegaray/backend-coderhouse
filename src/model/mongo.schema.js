@@ -55,21 +55,15 @@ const productCart = new Schema(
     item: { type: Schema.Types.ObjectId, ref: "Products" },
     quantity: { type: Number },
   },
-  { _id: false, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  { _id: false }
 );
-
-productCart.virtual("product", {
-  ref: "item",
-  localField: "item",
-  foreignField: "_id",
-});
 
 export const cartSchema = mongoose.model(
   "Cart",
   new Schema(
     {
       user: { type: mongoose.Types.ObjectId, ref: "User" },
-      items: [{ type: productCart, ref: "Products" }],
+      items: [productCart],
     },
     { timestamps: true }
   )

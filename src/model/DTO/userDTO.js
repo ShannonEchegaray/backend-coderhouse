@@ -1,5 +1,6 @@
 class UserDTO {
   constructor(user) {
+    if (!user) return;
     this.id = user.id || user._id;
     this.name = user.name;
     this.lastname = user.lastname;

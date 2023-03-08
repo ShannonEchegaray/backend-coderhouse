@@ -26,9 +26,7 @@ class OrderDao extends Base {
   }
 
   async getById(id) {
-    const order = this.schema.findOne({ _id: id }).populate("user");
-
-    if (!order) throw new Error("No results");
+    const order = await this.schema.findOne({ _id: id }).populate("user");
 
     return order;
   }
@@ -36,15 +34,13 @@ class OrderDao extends Base {
   async updateById(id, properties = {}) {
     try {
       const data = await this.getById(id);
-      const updated = await this.schema.updateOne(
+      const updated = await this.schema.findOneAndUpdate(
         { _id: id },
-        { ...data, ...properties }
+        { ...data, ...properties },
+        { new: true }
       );
 
-      if (updated.matchedCount === 0)
-        throw new Error("No se encontro documento a modificar.");
-
-      return;
+      return updated;
     } catch (error) {
       throw error;
     }

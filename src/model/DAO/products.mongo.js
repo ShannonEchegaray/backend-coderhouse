@@ -26,23 +26,19 @@ class ProductsDao extends Base {
   async getById(id) {
     const product = await this.schema.findOne({ _id: id }, { __v: false });
 
-    if (!product) throw new Error("No results.");
-
     return new ProductDTO(product);
   }
 
   async updateById(id, properties = {}) {
     try {
       const data = await this.getById(id);
-      const updated = await this.schema.updateOne(
+      const updated = await this.schema.findOneAndUpdate(
         { _id: id },
-        { ...data, ...properties }
+        { ...data, ...properties },
+        { new: true }
       );
 
-      if (updated.matchedCount === 0)
-        throw new Error("No se han encontrado documentos a modificar");
-
-      return;
+      return updated;
     } catch (error) {
       throw error;
     }

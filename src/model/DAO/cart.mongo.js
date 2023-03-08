@@ -20,13 +20,7 @@ class CartDao extends Base {
   async getAll(query = {}) {
     const carts = await this.schema
       .find(query, { __v: false })
-      .populate("user")
-      .populate({
-        path: "items",
-        populate: { path: "product" },
-      });
-
-    //TODO: Corregir populate!!!!!
+      .populate("user");
 
     return carts.map((cart) => new CartDTO(cart));
   }
@@ -35,22 +29,21 @@ class CartDao extends Base {
     const cart = await this.schema
       .findOne({ _id: id })
       .populate("items")
-      .populate("user");
-
-    if (!cart) throw new Error("No results");
+      .populate({
+        path: "items",
+        populate: { path: "item", model: "Products" },
+      });
 
     return new CartDTO(cart);
   }
 
   async updateById(id, properties = {}) {
     try {
-      const data = await this.getById(id);
+      const data = (await this.getById(id)) || {};
       const updated = await this.schema.findOneAndUpdate(
         { _id: id },
         { ...data, ...properties }
       );
-
-      if (!updated) throw new Error("No se encontro documento a modificar.");
 
       return updated;
     } catch (error) {

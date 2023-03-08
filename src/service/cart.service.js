@@ -13,7 +13,10 @@ class CartService {
 
   async getCartByUser(id) {
     const user = await userDAO.getById(id);
-    return cartDAO.getById(user.cart._id);
+
+    console.log(user);
+
+    return cartDAO.getById(user.cart.id);
   }
 
   async getCartById(id) {
@@ -32,8 +35,6 @@ class CartService {
     const cart = await this.getCartByUser(user.id);
 
     const isItem = cart.items.find((cartItem) => cartItem.id === item.id);
-
-    console.log(isItem.id, item.id);
 
     if (isItem) {
       isItem.quantity += item.quantity;
