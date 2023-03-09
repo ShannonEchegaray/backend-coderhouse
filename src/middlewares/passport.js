@@ -60,7 +60,6 @@ passport.use(
 
         return done(null, user[0]);
       } catch (error) {
-        console.log("Error", error);
         return done(error);
       }
     }
@@ -75,7 +74,6 @@ passport.use(
     },
     async (token, done) => {
       try {
-        console.log(token);
         return done(null, token.user);
       } catch (error) {
         done(error);

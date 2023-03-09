@@ -2,12 +2,16 @@ import { Router } from "express";
 import passport from "passport";
 import userController from "../../../controller/user.controller.js";
 import loginController from "../../../controller/login.controller.js";
-import { validateUserProperties } from "../../../middlewares/validate.js";
+import {
+  validateUserCreateProperties,
+  validateUserProperties,
+} from "../../../middlewares/validate.js";
 
 const router = Router();
 
 router.post(
   "/register",
+  validateUserProperties(),
   passport.authenticate("register", { session: false }),
   (req, res) => {
     res.json({ message: "Has registrado correctamente tu usuario" });
@@ -28,9 +32,9 @@ router.get(
 );
 router.post(
   "/",
-  // passport.authenticate("jwt", { session: false }),
-  // validateUserProperties(),
-  // loginController.isAdmin,
+  passport.authenticate("jwt", { session: false }),
+  validateUserCreateProperties(),
+  loginController.isAdmin,
   userController.createUser
 );
 router.put(

@@ -1,4 +1,5 @@
 import ProductsDao from "../model/DAO/products.mongo.js";
+import { ProductNotFound } from "../utils/error.js";
 
 const productsDAO = ProductsDao.getInstance();
 
@@ -8,7 +9,11 @@ class ProductsService {
   }
 
   async getProductById(id) {
-    return productsDAO.getById(id);
+    const product = await productsDAO.getById(id);
+
+    if (!product) throw new ProductNotFound("Producto no encontrado");
+
+    return product;
   }
 
   async createProduct(properties) {

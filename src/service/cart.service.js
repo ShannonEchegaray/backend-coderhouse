@@ -1,6 +1,7 @@
 import CartDao from "../model/DAO/cart.mongo.js";
 import ProductsDao from "../model/DAO/products.mongo.js";
 import UserDao from "../model/DAO/user.mongo.js";
+import { CartNotFound, ProductNotFound, UserNotFound } from "../utils/error.js";
 
 const cartDAO = CartDao.getInstance();
 const productsDAO = ProductsDao.getInstance();
@@ -14,11 +15,21 @@ class CartService {
   async getCartByUser(id) {
     const user = await userDAO.getById(id);
 
-    return cartDAO.getById(user.cart.id);
+    if (!user) throw new UserNotFound();
+
+    const cart = await cartDAO.getById(user.cart.id);
+
+    if (!cart) throw new CartNotFound();
+
+    return cart;
   }
 
   async getCartById(id) {
-    return cartDAO.getById(id);
+    const cart = await cartDAO.getById(id);
+
+    if (!cart) throw new CartNotFound();
+
+    return cart;
   }
 
   async createCart(properties) {
@@ -28,9 +39,11 @@ class CartService {
   async addProductByUser(user, item) {
     const product = await productsDAO.getById(item.id);
 
-    if (!product) throw new Error("Producto no encontrado.");
+    if (!product) throw new ProductNotFound();
 
     const cart = await this.getCartByUser(user.id);
+
+    if (!cart) throw new CartNotFound();
 
     const isItem = cart.items.find((cartItem) => cartItem.item.id === item.id);
 
@@ -51,14 +64,14 @@ class CartService {
   async modifyCartProductsById(id, items) {
     const cart = await cartDAO.getById(id);
 
-    if (!cart) throw new Error("Carrito no encontrado D;");
+    if (!cart) throw new CartNotFound();
 
     const products = await productsDAO.getAll({
       _id: { $in: items.map(({ id }) => id) },
     });
 
     if (items.length !== products.length) {
-      throw new Error("Un producto no fue encontrado.");
+      throw new ProductNotFound();
     }
 
     cart.items = products.map(({ id }) => ({
@@ -81,9 +94,7 @@ class CartService {
     const cart = await cartDAO.getById(id);
 
     if (!cart) {
-      throw new Error(
-        "Capo, el id que me envias difiere de todos los id's que tenemos en la base de datos, que te pasa loco!."
-      );
+      throw new CartNotFound();
     }
 
     cart.items = [];

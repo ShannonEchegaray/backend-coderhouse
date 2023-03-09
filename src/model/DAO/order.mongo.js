@@ -22,33 +22,30 @@ class OrderDao extends Base {
       .find(query, { __v: false })
       .populate("user");
 
-    return orders.map((order) => new OrderDTO(order));
+    return orders.map((order) => new OrderDTO(order).create());
   }
 
   async getById(id) {
     const order = await this.schema.findOne({ _id: id }).populate("user");
 
-    return order;
+    return new OrderDTO(order).create();
   }
 
   async updateById(id, properties = {}) {
-    try {
-      const data = await this.getById(id);
-      const updated = await this.schema.findOneAndUpdate(
-        { _id: id },
-        { ...data, ...properties },
-        { new: true }
-      );
+    const data = await this.getById(id);
+    const updated = await this.schema.findOneAndUpdate(
+      { _id: id },
+      { ...data, ...properties },
+      { new: true }
+    );
 
-      return updated;
-    } catch (error) {
-      throw error;
-    }
+    return new OrderDTO(updated).create();
   }
 
   async create(properties) {
     const data = this.schema(properties);
-    return new OrderDTO(await data.save());
+
+    return new OrderDTO(await data.save()).create();
   }
 
   async deleteById(id) {

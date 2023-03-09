@@ -10,35 +10,30 @@ const transport = createTransport({
   },
 });
 
-const promiseSendMail = (subject, message) =>
-  new Promise((res, rej) => {
-    transport.sendMail(
-      {
-        from: process.env.EMAIL,
-        to: process.env.EMAIL_ADMIN,
-        subject,
-        html: message,
-      },
-      (error, info) => {
-        if (error) return rej(error);
-        res(info);
-      }
-    );
-  });
-
 export const sendEmailProductsPurchased = async (user, { items, id }) => {
   const productsMessage = `
-  <p>Buenas!, has comprado los siguientes productos</p>
+  <p>Buenas!, se han comprado los siguientes productos</p>
   ${items
     .map(
       (product) => `
-  <p>${product.name}</p>
-  <p>${product.quantity}</p>
-  <p>${product.price}</p>
-  <p>${product.finalPrice}</p>
+  <p>Nombre: ${product.name}</p>
+  <p>Cantidad: ${product.quantity}</p>
+  <p>Precio: ${product.price}</p>
+  <p>Precio Final: ${product.finalPrice}</p>
   `
     )
-    .join("\n\n")}`;
+    .join("\n\n")}
+    <p>El precio final es de ${items.reduce(
+      (summary, producto) => summary + producto.finalPrice,
+      0
+    )}</p>`;
 
-  return await promiseSendMail("Han creado la orden " + id, productsMessage);
+  const data = await transport.sendMail({
+    from: "Pepe la almeja",
+    to: process.env.EMAIL_ADMIN,
+    subject: user.email + " ha creado la orden " + id,
+    html: productsMessage,
+  });
+
+  console.log(data);
 };

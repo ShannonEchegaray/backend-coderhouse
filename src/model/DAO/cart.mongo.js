@@ -22,7 +22,9 @@ class CartDao extends Base {
       .find(query, { __v: false })
       .populate("user");
 
-    return carts.map((cart) => new CartDTO(cart));
+    console.log(carts);
+
+    return carts.map((cart) => new CartDTO(cart).create());
   }
 
   async getById(id) {
@@ -34,7 +36,7 @@ class CartDao extends Base {
         populate: { path: "item", model: "Products" },
       });
 
-    return new CartDTO(cart);
+    return new CartDTO(cart).create();
   }
 
   async updateById(id, properties = {}) {
@@ -45,12 +47,12 @@ class CartDao extends Base {
       { new: true }
     );
 
-    return new CartDTO(updated);
+    return new CartDTO(updated).create();
   }
 
   async create(properties) {
     const data = this.schema(properties);
-    return new CartDTO(await data.save());
+    return new CartDTO(await data.save()).create();
   }
 
   async deleteById(id) {

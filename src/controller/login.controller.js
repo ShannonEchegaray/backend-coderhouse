@@ -9,8 +9,6 @@ class LoginController {
       { session: false },
       async (err, user, info) => {
         try {
-          console.log(user);
-
           if (err || !user) {
             const error = new Error("An error occurred.");
 
@@ -18,12 +16,12 @@ class LoginController {
           }
 
           req.login(user, { session: false }, (error) => {
-            console.log(error);
+            if (error) {
+              throw error;
+            }
+
             const body = { id: user.id, email: user.email };
             const token = jwt.sign({ user: body }, "TOP_SECRET");
-
-            console.log(body);
-            console.log(token);
 
             return res.json({ token });
           });

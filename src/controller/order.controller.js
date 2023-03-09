@@ -5,7 +5,6 @@ class OrderController {
   async purchaseOrderByUser(req, res, next) {
     try {
       const order = await orderService.purchaseOrderByUser(req.user);
-      console.log(req.user);
       mailService.purchaseItem(req.user, order);
 
       res.status(201).json(order);

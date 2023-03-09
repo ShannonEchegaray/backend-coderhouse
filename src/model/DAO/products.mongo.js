@@ -20,33 +20,29 @@ class ProductsDao extends Base {
   async getAll(query = {}) {
     const products = await this.schema.find(query, { __v: false });
 
-    return products.map((product) => new ProductDTO(product));
+    return products.map((product) => new ProductDTO(product).create());
   }
 
   async getById(id) {
     const product = await this.schema.findOne({ _id: id }, { __v: false });
 
-    return new ProductDTO(product);
+    return new ProductDTO(product).create();
   }
 
   async updateById(id, properties = {}) {
-    try {
-      const data = await this.getById(id);
-      const updated = await this.schema.findOneAndUpdate(
-        { _id: id },
-        { ...data, ...properties },
-        { new: true }
-      );
+    const data = await this.getById(id);
+    const updated = await this.schema.findOneAndUpdate(
+      { _id: id },
+      { ...data, ...properties },
+      { new: true }
+    );
 
-      return updated;
-    } catch (error) {
-      throw error;
-    }
+    return new ProductDTO(updated).create();
   }
 
   async create(properties) {
     const data = this.schema(properties);
-    return new ProductDTO(await data.save());
+    return new ProductDTO(await data.save()).create();
   }
 
   async deleteById(id) {

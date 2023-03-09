@@ -1,14 +1,21 @@
 import UserDao from "../model/DAO/user.mongo.js";
+import { UserNotFound } from "../utils/error.js";
 
 const userDAO = UserDao.getInstance();
 
 class UserService {
   async getProfileByUser(id) {
-    return userDAO.getById(id);
+    const user = await userDAO.getById(id);
+    if (!user) throw new UserNotFound("El usuario no fue encontrado.");
+
+    return user;
   }
 
   async getProfileById(id) {
-    return userDAO.getById(id);
+    const user = await userDAO.getById(id);
+    if (!user) throw new UserNotFound("El usuario no fue encontrado");
+
+    return user;
   }
 
   async createUser(properties) {

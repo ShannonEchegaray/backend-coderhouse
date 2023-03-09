@@ -5,7 +5,9 @@ import passport from "passport";
 
 const router = Router();
 
-router.get("/test", (req, res) => {
+router.get("/test", (req, res, next) => {
+  const random = Math.random() > 0.5;
+  if (random) return next(new Error("ASDASDASDASD"));
   res.send("Product");
 });
 

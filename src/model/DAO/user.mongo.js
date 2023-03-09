@@ -20,7 +20,7 @@ class UserDao extends Base {
   async getAll(query = {}) {
     const users = await this.schema.find(query, { __v: false });
 
-    return users.map((user) => new UserDTO(user));
+    return users.map((user) => new UserDTO(user).create());
   }
 
   async getById(id) {
@@ -29,27 +29,23 @@ class UserDao extends Base {
       .populate("cart")
       .populate("order");
 
-    return new UserDTO(user);
+    return new UserDTO(user).create();
   }
 
   async updateById(id, properties = {}) {
-    try {
-      const data = await this.getById(id);
-      const updated = await this.schema.findOneAndUpdate(
-        { _id: id },
-        { ...data, ...properties },
-        { new: true }
-      );
+    const data = await this.getById(id);
+    const updated = await this.schema.findOneAndUpdate(
+      { _id: id },
+      { ...data, ...properties },
+      { new: true }
+    );
 
-      return updated;
-    } catch (error) {
-      throw error;
-    }
+    return new UserDTO(updated).create();
   }
 
   async create(properties) {
     const data = this.schema(properties);
-    return new UserDTO(await data.save());
+    return new UserDTO(await data.save()).create();
   }
 
   async deleteById(id) {

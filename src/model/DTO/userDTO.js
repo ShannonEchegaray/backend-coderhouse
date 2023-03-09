@@ -1,6 +1,9 @@
 class UserDTO {
+  #user;
+
   constructor(user) {
     if (!user) return;
+    this.#user = Boolean(user);
     this.id = user.id || user._id;
     this.name = user.name;
     this.lastname = user.lastname;
@@ -12,6 +15,11 @@ class UserDTO {
     this.address = user.address;
     this.cart = user.cart;
     this.order = user.order;
+  }
+
+  create() {
+    if (!this.#user) return;
+    return this;
   }
 }
 
