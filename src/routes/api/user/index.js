@@ -9,14 +9,22 @@ import {
 
 const router = Router();
 
-router.post(
-  "/register",
-  validateUserProperties(),
-  passport.authenticate("register", { session: false }),
-  (req, res) => {
-    res.json({ message: "Has registrado correctamente tu usuario" });
-  }
-);
+router.post("/register", validateUserProperties(), (req, res, next) => {
+  passport.authenticate(
+    "register",
+    {
+      session: false,
+    },
+    (err, user, info) => {
+      if (err) return next(err);
+
+      if (!user) return next(info);
+
+      res.json({ message: "Has registrado correctamente tu usuario" });
+    }
+  )(req, res, next);
+});
+
 router.post("/login", loginController.login);
 
 router.get(

@@ -18,6 +18,12 @@ export class UserNotFound extends BaseError {
   }
 }
 
+export class ChatNotFound extends BaseError {
+  constructor() {
+    super("El chat no ha sido encontrado", 404);
+  }
+}
+
 export class ProductNotFound extends BaseError {
   constructor() {
     super("El producto no ha sido encontrado", 404);

@@ -22,8 +22,6 @@ class CartDao extends Base {
       .find(query, { __v: false })
       .populate("user");
 
-    console.log(carts);
-
     return carts.map((cart) => new CartDTO(cart).create());
   }
 

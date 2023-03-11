@@ -11,3 +11,5 @@ export const emailConfig = {
   password: process.env.EMAIL_PASS,
   admin_email: process.env.EMAIL_ADMIN,
 };
+
+export const secretToken = process.env.SECRET_TOKEN;

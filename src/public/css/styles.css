@@ -1,0 +1,8 @@
+body {
+  padding: 50px;
+}
+
+.border{
+  border: solid 1px #ccc;
+  border-radius: 5px;
+}

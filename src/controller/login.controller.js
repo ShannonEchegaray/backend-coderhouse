@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import passport from "passport";
+import { secretToken } from "../config/config.js";
 import loginService from "../service/login.service.js";
 
 class LoginController {
@@ -21,7 +22,7 @@ class LoginController {
             }
 
             const body = { id: user.id, email: user.email };
-            const token = jwt.sign({ user: body }, "TOP_SECRET");
+            const token = jwt.sign({ user: body }, secretToken);
 
             return res.json({ token });
           });

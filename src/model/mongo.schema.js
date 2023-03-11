@@ -13,6 +13,7 @@ export const userSchema = mongoose.model(
       phone_number: { type: String, required: false, unique: true },
       profile_image: { type: String, default: "placeholder.jpg" },
       address: { type: String, required: true },
+      chat: { type: mongoose.Types.ObjectId, ref: "Chat" },
       cart: { type: mongoose.Types.ObjectId, ref: "Cart" },
       order: [{ type: mongoose.Types.ObjectId, ref: "Order" }],
     },
@@ -77,6 +78,27 @@ export const orderSchema = mongoose.model(
       state: { type: String, default: "generated" },
       email: { type: String },
       user: { type: mongoose.Types.ObjectId, ref: "User" },
+    },
+    { timestamps: true }
+  )
+);
+
+const messageSchema = new Schema({
+  _id: false,
+  body: { type: String },
+  createdAt: { type: Date, default: new Date() },
+  author: { type: String },
+});
+
+export const chatSchema = mongoose.model(
+  "Chat",
+  new Schema(
+    {
+      author: { type: String },
+      messages: {
+        type: [messageSchema],
+        default: [],
+      },
     },
     { timestamps: true }
   )

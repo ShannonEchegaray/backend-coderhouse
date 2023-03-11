@@ -9,9 +9,7 @@ export const validateProperties = (schema) => {
 
   return (req, _, next) => {
     try {
-      console.log(req.body);
       for (const property in req.body) {
-        console.log(property);
         if (!schema.hasOwnProperty(property)) {
           if (
             typeof schema[property]?.required === "boolean" &&

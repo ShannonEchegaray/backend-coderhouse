@@ -7,6 +7,7 @@ import {
 import UserDao from "../model/DAO/user.mongo.js";
 import CartDao from "../model/DAO/cart.mongo.js";
 import { compare, encrypt } from "../utils/bcrypt.js";
+import { secretToken } from "../config/config.js";
 
 const UserDAO = UserDao.getInstance();
 const CartDAO = CartDao.getInstance();
@@ -18,7 +19,9 @@ passport.use(
     async (req, email, password, done) => {
       try {
         const user = await UserDAO.getAll({ email });
+        console.log("Hola mundo", user);
         if (user.length === 1) {
+          console.log("El usuario ya existe");
           return done(null, false, { message: "El usuario ya existe" });
         }
 
@@ -69,7 +72,7 @@ passport.use(
 passport.use(
   new JWTStrategy(
     {
-      secretOrKey: "TOP_SECRET",
+      secretOrKey: secretToken,
       jwtFromRequest: ExtractJWT.fromUrlQueryParameter("secret_token"),
     },
     async (token, done) => {

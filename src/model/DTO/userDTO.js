@@ -14,6 +14,7 @@ class UserDTO {
     this.profile_image = user.profile_image;
     this.address = user.address;
     this.cart = user.cart;
+    this.chat = user.chat;
     this.order = user.order;
   }
 
