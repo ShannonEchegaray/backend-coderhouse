@@ -5,11 +5,38 @@
   const ulChats = document.querySelector("#chats");
   let chatActive;
 
-  localStorage.setItem(
-    "token",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQwODg5OWI1MDRkYzQzNTU0MGE5YWVmIiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIn0sImlhdCI6MTY3ODQ5MjE4Mn0.LfuZcvZsKvlN4ZfDd8rvgTpTkLVTwHDXUiAhIhEYzds"
-  );
   const token = localStorage.getItem("token");
+
+  if (!token) {
+    document.body.innerHTML = "";
+    const input = document.createElement("input");
+    const button = document.createElement("button");
+
+    input.type = "text";
+    button.innerHTML = "Enviar";
+
+    button.onclick = async () => {
+      if (input.value === "") return;
+
+      try {
+        const response = await fetch("/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: input.value }),
+        });
+
+        if (response.status === 200) {
+          localStorage.setItem("token", input.value);
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    document.body.appendChild(input);
+    document.body.appendChild(button);
+    return console.warn("POR FAVOR SETEAR TOKEN Y REINICIAR LA PAGINA");
+  }
 
   const drawMessages = (chat) => {
     messages.innerHTML = "";

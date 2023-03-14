@@ -6,7 +6,7 @@ import loginController from "../../../controller/login.controller.js";
 const router = Router();
 
 router.get(
-  "/adm",
+  "/all",
   passport.authenticate("jwt", { session: false }),
   loginController.isAdmin,
   cartController.getAllCarts
@@ -17,16 +17,10 @@ router.get(
   cartController.getCartByUser
 );
 router.get(
-  "/adm/:id",
+  "/:id",
   passport.authenticate("jwt", { session: false }),
   loginController.isAdmin,
   cartController.getCartById
-);
-router.post(
-  "/adm",
-  passport.authenticate("jwt", { session: false }),
-  loginController.isAdmin,
-  cartController.createCart
 );
 router.post(
   "/",
@@ -34,7 +28,7 @@ router.post(
   cartController.addProductByUser
 );
 router.put(
-  "/:id/products",
+  "/:id/product",
   passport.authenticate("jwt", { session: false }),
   loginController.isAdmin,
   cartController.modifyCartProductsById
@@ -45,7 +39,7 @@ router.delete(
   cartController.deleteAllProductByUser
 );
 router.delete(
-  "/adm/:id",
+  "/:id/product",
   passport.authenticate("jwt", { session: false }),
   loginController.isAdmin,
   cartController.deleteAllCartProductsById

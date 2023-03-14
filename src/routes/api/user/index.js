@@ -42,7 +42,6 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   validateUserCreateProperties(),
-  loginController.isAdmin,
   userController.createUser
 );
 router.put(
@@ -63,7 +62,7 @@ router.delete(
   userController.deleteById
 );
 router.delete(
-  "/:id",
+  "/",
   passport.authenticate("jwt", { session: false }),
   userController.deleteByUser
 );

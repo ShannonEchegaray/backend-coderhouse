@@ -73,7 +73,7 @@ passport.use(
   new JWTStrategy(
     {
       secretOrKey: secretToken,
-      jwtFromRequest: ExtractJWT.fromUrlQueryParameter("secret_token"),
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     },
     async (token, done) => {
       try {
